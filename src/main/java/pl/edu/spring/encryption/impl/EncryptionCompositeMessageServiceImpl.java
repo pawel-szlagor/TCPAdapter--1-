@@ -26,9 +26,10 @@ public class EncryptionCompositeMessageServiceImpl implements EncryptionComposit
     @Override
     public String encryptStringMessage(String originalMessage, EncryptionParameters encParam) throws IllegalArgumentException{
         EncryptionAlgorithms algorithm = encParam.getAlgorithm();
-        String key = encParam.getKey();
+        String key = encParam.getStringKey();
         switch(algorithm){
             case CAESAR: return encryptionCaesarAlgorithmServiceImpl.encryptStringMessage(originalMessage, key);
+            case ROT_13: return encryptionCaesarAlgorithmServiceImpl.encryptStringMessage(originalMessage, "13");
             case NO_ALGORITHM: return originalMessage;
             default: throw new IllegalArgumentException("No implementation for choosen algortihm found");
         }
@@ -37,9 +38,10 @@ public class EncryptionCompositeMessageServiceImpl implements EncryptionComposit
     @Override
     public String decryptStringMessage(String encryptedMessage, EncryptionParameters encParam) {
         EncryptionAlgorithms algorithm = encParam.getAlgorithm();
-        String key = encParam.getKey();
+        String key = encParam.getStringKey();
         switch(algorithm){
             case CAESAR: return encryptionCaesarAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, key);
+            case ROT_13: return encryptionCaesarAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, "13");
             case NO_ALGORITHM: return encryptedMessage;
             default: throw new IllegalArgumentException("No implementation for choosen algortihm found");
         }

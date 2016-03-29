@@ -30,6 +30,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import static pl.edu.spring.encryption.EncryptionAlgorithms.NO_ALGORITHM;
+import static pl.edu.spring.encryption.EncryptionAlgorithms.values;
+
 @Controller
 @ContextConfiguration(loader = CustomContextLoader.class, locations = "/META-INF/spring-config.xml")
 @DirtiesContext
@@ -53,6 +56,8 @@ public class MessageFrameController {
     private Button chooseDirectoryButton;
     @FXML
     private Button decryptButton;
+    @FXML
+    private Button chooseKeyFileButton;
 
     @Autowired
     private TcpClientServerService tcpClientServerService;
@@ -110,8 +115,17 @@ public class MessageFrameController {
     }
 
     private void initializeEncryptionOptions() {
-        algorithmComboBox.getItems().addAll(EncryptionAlgorithms.values());
-        algorithmComboBox.setValue(EncryptionAlgorithms.NO_ALGORITHM);
+        algorithmComboBox.getItems().addAll(values());
+        algorithmComboBox.setValue(NO_ALGORITHM);
+        algorithmComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue.equals(EncryptionAlgorithms.NO_ALGORITHM)){
+                keyPasswordField.setDisable(true);
+                chooseKeyFileButton.setDisable(true);
+            } else {
+                keyPasswordField.setDisable(true);
+                chooseKeyFileButton.setDisable(true);
+            }
+        });
     }
 
     private void initializeTextOutput() {
@@ -174,7 +188,7 @@ public class MessageFrameController {
                 String answer = tcpClientServerService.sendTextMessage(encryptedMessage);
                 textInput.clear();
                 String output = textOutput.getText();
-                textOutput.setText(output.replace(MESSAGE_SENDING_IN_PROGRESS, "me:" + df.format(new Date()) + "\n" + answer));
+                textOutput.setText(output.replace(MESSAGE_SENDING_IN_PROGRESS, "me:" + df.format(new Date()) + "\n" + messageToSend));
                 return null;
             }
         };
@@ -201,8 +215,13 @@ public class MessageFrameController {
 
     private EncryptionParameters getEncParams() {
         EncryptionAlgorithms algorithmChosen = algorithmComboBox.getValue();
-        String key = keyPasswordField.getText();
-        return new EncryptionParameters(algorithmChosen, key);
+        switch(algorithmChosen){
+            case NO_ALGORITHM:
+            case CAESAR:
+            case ROT_13:
+                return new EncryptionParameters(algorithmChosen, keyPasswordField.getText());
+        }
+        return null;
     }
 
     private void addMessageInProgressInOutput() {
@@ -237,6 +256,10 @@ public class MessageFrameController {
         if(selectedFileToSend != null){
             textInput.setText("Wybrano plik: " + selectedFileToSend.getAbsolutePath() + ". Czy na pewno chcesz wysłać?");
         }
+    }
+
+    public void chooseKeyFile(){
+        //noop
     }
 
     public void chooseDirectory(){

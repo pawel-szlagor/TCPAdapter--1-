@@ -5,7 +5,8 @@ package pl.edu.spring.encryption;
  */
 public enum EncryptionAlgorithms {
     NO_ALGORITHM("no algorithm"),
-    CAESAR("Caesar algorithm");
+    CAESAR("Caesar algorithm"),
+    ROT_13("ROT 13");
 
     private final String desc;
 

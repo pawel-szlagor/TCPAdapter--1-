@@ -1,15 +1,23 @@
 package pl.edu.spring.encryption;
 
+import java.io.File;
+
 /**
  * Created by Pawel on 2016-03-19.
  */
 public class EncryptionParameters {
     private EncryptionAlgorithms algorithm;
-    private String key;
+    private String stringKey;
+    private File fileKey;
 
     public EncryptionParameters(EncryptionAlgorithms algorithm, String key) {
         this.algorithm = algorithm;
-        this.key = key;
+        this.stringKey = key;
+    }
+
+    public EncryptionParameters(EncryptionAlgorithms algorithm, File fileKey) {
+        this.algorithm = algorithm;
+        this.fileKey = fileKey;
     }
 
     public EncryptionAlgorithms getAlgorithm() {
@@ -20,11 +28,19 @@ public class EncryptionParameters {
         this.algorithm = algorithm;
     }
 
-    public String getKey() {
-        return key;
+    public String getStringKey() {
+        return stringKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setStringKey(String stringKey) {
+        this.stringKey = stringKey;
+    }
+
+    public File getFileKey() {
+        return fileKey;
+    }
+
+    public void setFileKey(File fileKey) {
+        this.fileKey = fileKey;
     }
 }
