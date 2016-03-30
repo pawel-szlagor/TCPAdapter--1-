@@ -37,9 +37,11 @@ public class CustomContextLoader extends GenericXmlContextLoader {
                                        MergedContextConfiguration mergedConfig) {
 
         int availableServerSocket = SocketUtils.findAvailableServerSocket(3456);
+        int availableClientSocket = SocketUtils.findAvailableServerSocket(3457);
 
         final Map<String, Object> sockets = new HashMap<String, Object>();
         sockets.put("availableServerSocket", availableServerSocket);
+        sockets.put("availableClientSocket", availableClientSocket);
         sockets.put("ipAddress", "localhost");
 
         if (LOGGER.isInfoEnabled()) {

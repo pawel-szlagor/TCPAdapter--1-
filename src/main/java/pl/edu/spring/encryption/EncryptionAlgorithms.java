@@ -6,15 +6,16 @@ package pl.edu.spring.encryption;
 public enum EncryptionAlgorithms {
     NO_ALGORITHM("no algorithm"),
     CAESAR("Caesar algorithm"),
-    ROT_13("ROT 13");
+    ROT_13("ROT 13"),
+    VIGENERE("Vigenère'a");
 
     private final String desc;
 
-    EncryptionAlgorithms(String position) {
-        this.desc = position;
+    EncryptionAlgorithms(String desc) {
+        this.desc = desc;
     }
 
-    public String getposition() {
+    public String getDesc() {
         return this.desc;
     }
 
