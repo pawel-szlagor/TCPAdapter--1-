@@ -79,10 +79,10 @@ public class Config {
         TcpClientServerService tcpClientServerService;
 
         @Transformer(inputChannel = "fromTcp", outputChannel = "toEcho")
-        public FileData convert(FileData fileReceived) {
+        public String convert(FileData fileReceived) {
             tcpClientServerService.receive(fileReceived);
             System.out.println("Otrzymano: " + fileReceived.getFileName());
-            return fileReceived;
+            return "Otrzymano: " + fileReceived.getFileName();
         }
 
         @Transformer(inputChannel = "fromTcp", outputChannel = "toEcho")
@@ -94,7 +94,7 @@ public class Config {
 
         @ServiceActivator(inputChannel = "toEcho")
         public String receiveFromEcho(FileData in) {
-            tcpClientServerService.receive(in);
+            //tcpClientServerService.receive(in);
             System.out.println("Otrzymano: " + in.getFileName());
             return "Received file: " + in.getFileName();
         }

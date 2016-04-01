@@ -8,7 +8,6 @@ import javafx.stage.FileChooser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.core.env.MapPropertySource;
-import org.springframework.integration.test.util.SocketUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -79,6 +78,7 @@ public class MessageFrameController {
     private File selectedFileToSend;
     private File directoryForReceivedFiles = new File("E:\\Pobrane");
     private String lastReceivedMessage;
+    private File keyFile;
 
     public MessageFrameController() {
     }
@@ -93,12 +93,14 @@ public class MessageFrameController {
     public void initializeContext() {
         context = new GenericXmlApplicationContext();
         System.out.print("Detect open server socket...");
-        int availableServerSocket = SocketUtils.findAvailableServerSocket(Integer.parseInt(hostPort));
-        int availableClientSocket = SocketUtils.findAvailableServerSocket(Integer.parseInt(clientPort));
+        //int availableServerSocket = SocketUtils.findAvailableServerSocket(Integer.parseInt(hostPort));
+        //int availableClientSocket = SocketUtils.findAvailableServerSocket(Integer.parseInt(clientPort));
+        int serverSocket = Integer.parseInt(hostPort);
+        int clientSocket = Integer.parseInt(clientPort);
 
         final Map<String, Object> sockets = new HashMap<String, Object>();
-        sockets.put("availableServerSocket", availableServerSocket);
-        sockets.put("availableClientSocket", availableClientSocket);
+        sockets.put("availableServerSocket", serverSocket);
+        sockets.put("availableClientSocket", clientSocket);
 
         sockets.put("ipAddress", ipAddress);
 
@@ -118,12 +120,16 @@ public class MessageFrameController {
         algorithmComboBox.getItems().addAll(values());
         algorithmComboBox.setValue(NO_ALGORITHM);
         algorithmComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue.equals(EncryptionAlgorithms.NO_ALGORITHM)){
-                keyPasswordField.setDisable(true);
-                chooseKeyFileButton.setDisable(true);
-            } else {
-                keyPasswordField.setDisable(true);
-                chooseKeyFileButton.setDisable(true);
+            switch (newValue){
+                case NO_ALGORITHM:
+                    keyPasswordField.setDisable(true);
+                    chooseKeyFileButton.setDisable(true);
+                    break;
+                case ROT_13:
+                case CAESAR:
+                case VIGENERE:
+                    keyPasswordField.setDisable(false);
+                    chooseKeyFileButton.setDisable(true);
             }
         });
     }
@@ -219,6 +225,7 @@ public class MessageFrameController {
             case NO_ALGORITHM:
             case CAESAR:
             case ROT_13:
+            case VIGENERE:
                 return new EncryptionParameters(algorithmChosen, keyPasswordField.getText());
         }
         return null;
@@ -259,7 +266,9 @@ public class MessageFrameController {
     }
 
     public void chooseKeyFile(){
-        //noop
+        FileChooser fileChooser = new FileChooser();
+        keyFile = fileChooser.showOpenDialog(null);
+        System.out.println("wybrano plik z kluczem: " + keyFile.getAbsolutePath());
     }
 
     public void chooseDirectory(){

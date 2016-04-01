@@ -17,6 +17,8 @@ import java.util.List;
 public class EncryptionCompositeMessageServiceImpl implements EncryptionCompositeMessageService {
     @Autowired
     private EncryptionAlgorithmService encryptionCaesarAlgorithmServiceImpl;
+    @Autowired
+    private EncryptionAlgorithmService encryptionVigenereAlgorithmServiceImpl;
 
     @Override
     public List<EncryptionAlgorithms> getAllAvailableEncryptionAlgorithms() {
@@ -28,7 +30,8 @@ public class EncryptionCompositeMessageServiceImpl implements EncryptionComposit
         EncryptionAlgorithms algorithm = encParam.getAlgorithm();
         String key = encParam.getStringKey();
         switch(algorithm){
-            case CAESAR: return encryptionCaesarAlgorithmServiceImpl.encryptStringMessage(originalMessage, key);
+            case CAESAR:
+            case VIGENERE: return encryptionVigenereAlgorithmServiceImpl.encryptStringMessage(originalMessage, key);
             case ROT_13: return encryptionCaesarAlgorithmServiceImpl.encryptStringMessage(originalMessage, "13");
             case NO_ALGORITHM: return originalMessage;
             default: throw new IllegalArgumentException("No implementation for choosen algortihm found");
@@ -40,7 +43,8 @@ public class EncryptionCompositeMessageServiceImpl implements EncryptionComposit
         EncryptionAlgorithms algorithm = encParam.getAlgorithm();
         String key = encParam.getStringKey();
         switch(algorithm){
-            case CAESAR: return encryptionCaesarAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, key);
+            case CAESAR:
+            case VIGENERE: return encryptionVigenereAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, key);
             case ROT_13: return encryptionCaesarAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, "13");
             case NO_ALGORITHM: return encryptedMessage;
             default: throw new IllegalArgumentException("No implementation for choosen algortihm found");

@@ -55,7 +55,7 @@ public class StartMessageApplication extends Application {
         TextField text2 = new TextField();
         text2.setText("3456");
         TextField text3 = new TextField();
-        text3.setText("4567");
+        text3.setText("3457");
 
         GridPane grid = new GridPane();
         grid.add(label1, 1, 1);

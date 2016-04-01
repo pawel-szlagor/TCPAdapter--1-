@@ -43,8 +43,8 @@ public class EncryptionVigenereAlgorithmServiceImpl implements EncryptionAlgorit
 
     private char decryptSingleChar(int character, int shift) {
         return (character <= 'Z' && character >= 'A') ?
-                (char) (Math.floorMod(character - 'A' - shift - 'A', 26) + 'A') :
-                (char) (Math.floorMod(character - 'a' - shift - 'a', 26) + 'a');
+                (char) (Math.floorMod(character - 'A' - shift + 'A', 26) + 'A') :
+                (char) (Math.floorMod(character - 'a' - shift + 'a', 26) + 'a');
     }
 
     private char encryptSingleChar(int character, int shift) {
