@@ -7,7 +7,8 @@ public enum EncryptionAlgorithms {
     NO_ALGORITHM("no algorithm"),
     CAESAR("Caesar algorithm"),
     ROT_13("ROT 13"),
-    VIGENERE("Vigenère'a");
+    VIGENERE("Vigenère'a"),
+    AES ("AES");
 
     private final String desc;
 

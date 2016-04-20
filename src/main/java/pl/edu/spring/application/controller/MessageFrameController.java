@@ -38,8 +38,6 @@ public class MessageFrameController {
     @FXML
     private Button sendButton;
     @FXML
-    private Button closeButton;
-    @FXML
     private TextArea textInput;
     @FXML
     private TextArea textOutput;
@@ -127,6 +125,7 @@ public class MessageFrameController {
                     break;
                 case CAESAR:
                 case VIGENERE:
+                case AES:
                     keyPasswordField.setDisable(false);
                     chooseKeyFileButton.setDisable(true);
             }
@@ -233,6 +232,7 @@ public class MessageFrameController {
             case CAESAR:
             case ROT_13:
             case VIGENERE:
+            case AES:
                 return new EncryptionParameters(algorithmChosen, keyPasswordField.getText());
         }
         return null;

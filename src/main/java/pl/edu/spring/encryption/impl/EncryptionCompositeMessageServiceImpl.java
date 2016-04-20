@@ -19,6 +19,8 @@ public class EncryptionCompositeMessageServiceImpl implements EncryptionComposit
     private EncryptionAlgorithmService encryptionCaesarAlgorithmServiceImpl;
     @Autowired
     private EncryptionAlgorithmService encryptionVigenereAlgorithmServiceImpl;
+    @Autowired
+    private EncryptionAlgorithmService encryptionAESAlgorithmServiceImpl;
 
     @Override
     public List<EncryptionAlgorithms> getAllAvailableEncryptionAlgorithms() {
@@ -33,9 +35,11 @@ public class EncryptionCompositeMessageServiceImpl implements EncryptionComposit
             case CAESAR:
                 return encryptionCaesarAlgorithmServiceImpl.encryptStringMessage(originalMessage, key);
             case VIGENERE:
-            return encryptionVigenereAlgorithmServiceImpl.encryptStringMessage(originalMessage, key);
+                return encryptionVigenereAlgorithmServiceImpl.encryptStringMessage(originalMessage, key);
             case ROT_13:
-            return encryptionCaesarAlgorithmServiceImpl.encryptStringMessage(originalMessage, "13");
+                return encryptionCaesarAlgorithmServiceImpl.encryptStringMessage(originalMessage, "13");
+            case AES:
+                return encryptionAESAlgorithmServiceImpl.encryptStringMessage(originalMessage, key);
             case NO_ALGORITHM:
                 return originalMessage;
             default:
@@ -51,9 +55,11 @@ public class EncryptionCompositeMessageServiceImpl implements EncryptionComposit
             case CAESAR:
                 return encryptionCaesarAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, key);
             case VIGENERE:
-            return encryptionVigenereAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, key);
+                return encryptionVigenereAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, key);
             case ROT_13:
-            return encryptionCaesarAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, "13");
+                return encryptionCaesarAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, "13");
+            case AES:
+                return encryptionAESAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, key);
             case NO_ALGORITHM:
                 return encryptedMessage;
             default:
@@ -69,9 +75,11 @@ public class EncryptionCompositeMessageServiceImpl implements EncryptionComposit
             case CAESAR:
                 return encryptionCaesarAlgorithmServiceImpl.encryptByteMessage(originalMessage, key);
             case VIGENERE:
-            return encryptionVigenereAlgorithmServiceImpl.encryptByteMessage(originalMessage, key);
+                return encryptionVigenereAlgorithmServiceImpl.encryptByteMessage(originalMessage, key);
             case ROT_13:
-            return encryptionCaesarAlgorithmServiceImpl.encryptByteMessage(originalMessage, "13");
+                return encryptionCaesarAlgorithmServiceImpl.encryptByteMessage(originalMessage, "13");
+            case AES:
+                return encryptionAESAlgorithmServiceImpl.encryptByteMessage(originalMessage, key);
             case NO_ALGORITHM:
                 return originalMessage;
             default:
@@ -87,9 +95,11 @@ public class EncryptionCompositeMessageServiceImpl implements EncryptionComposit
             case CAESAR:
                 return encryptionCaesarAlgorithmServiceImpl.decryptByteMessage(encryptedMessage, key);
             case VIGENERE:
-            return encryptionVigenereAlgorithmServiceImpl.decryptByteMessage(encryptedMessage, key);
+                return encryptionVigenereAlgorithmServiceImpl.decryptByteMessage(encryptedMessage, key);
             case ROT_13:
-            return encryptionCaesarAlgorithmServiceImpl.decryptByteMessage(encryptedMessage, "13");
+                return encryptionCaesarAlgorithmServiceImpl.decryptByteMessage(encryptedMessage, "13");
+            case AES:
+                return encryptionAESAlgorithmServiceImpl.decryptByteMessage(encryptedMessage, key);
             case NO_ALGORITHM:
                 return encryptedMessage;
             default:
