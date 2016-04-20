@@ -26,15 +26,20 @@ public class EncryptionCompositeMessageServiceImpl implements EncryptionComposit
     }
 
     @Override
-    public String encryptStringMessage(String originalMessage, EncryptionParameters encParam) throws IllegalArgumentException{
+    public String encryptStringMessage(String originalMessage, EncryptionParameters encParam) throws IllegalArgumentException {
         EncryptionAlgorithms algorithm = encParam.getAlgorithm();
         String key = encParam.getStringKey();
-        switch(algorithm){
+        switch (algorithm) {
             case CAESAR:
-            case VIGENERE: return encryptionVigenereAlgorithmServiceImpl.encryptStringMessage(originalMessage, key);
-            case ROT_13: return encryptionCaesarAlgorithmServiceImpl.encryptStringMessage(originalMessage, "13");
-            case NO_ALGORITHM: return originalMessage;
-            default: throw new IllegalArgumentException("No implementation for choosen algortihm found");
+                return encryptionCaesarAlgorithmServiceImpl.encryptStringMessage(originalMessage, key);
+            case VIGENERE:
+            return encryptionVigenereAlgorithmServiceImpl.encryptStringMessage(originalMessage, key);
+            case ROT_13:
+            return encryptionCaesarAlgorithmServiceImpl.encryptStringMessage(originalMessage, "13");
+            case NO_ALGORITHM:
+                return originalMessage;
+            default:
+                throw new IllegalArgumentException("No implementation for choosen algortihm found");
         }
     }
 
@@ -42,12 +47,53 @@ public class EncryptionCompositeMessageServiceImpl implements EncryptionComposit
     public String decryptStringMessage(String encryptedMessage, EncryptionParameters encParam) {
         EncryptionAlgorithms algorithm = encParam.getAlgorithm();
         String key = encParam.getStringKey();
-        switch(algorithm){
+        switch (algorithm) {
             case CAESAR:
-            case VIGENERE: return encryptionVigenereAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, key);
-            case ROT_13: return encryptionCaesarAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, "13");
-            case NO_ALGORITHM: return encryptedMessage;
-            default: throw new IllegalArgumentException("No implementation for choosen algortihm found");
+                return encryptionCaesarAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, key);
+            case VIGENERE:
+            return encryptionVigenereAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, key);
+            case ROT_13:
+            return encryptionCaesarAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, "13");
+            case NO_ALGORITHM:
+                return encryptedMessage;
+            default:
+                throw new IllegalArgumentException("No implementation for choosen algortihm found");
+        }
+    }
+
+    @Override
+    public byte[] encryptByteMessage(byte[] originalMessage, EncryptionParameters encParam) throws IllegalArgumentException {
+        EncryptionAlgorithms algorithm = encParam.getAlgorithm();
+        String key = encParam.getStringKey();
+        switch (algorithm) {
+            case CAESAR:
+                return encryptionCaesarAlgorithmServiceImpl.encryptByteMessage(originalMessage, key);
+            case VIGENERE:
+            return encryptionVigenereAlgorithmServiceImpl.encryptByteMessage(originalMessage, key);
+            case ROT_13:
+            return encryptionCaesarAlgorithmServiceImpl.encryptByteMessage(originalMessage, "13");
+            case NO_ALGORITHM:
+                return originalMessage;
+            default:
+                throw new IllegalArgumentException("No implementation for choosen algortihm found");
+        }
+    }
+
+    @Override
+    public byte[] decryptByteMessage(byte[] encryptedMessage, EncryptionParameters encParam) {
+        EncryptionAlgorithms algorithm = encParam.getAlgorithm();
+        String key = encParam.getStringKey();
+        switch (algorithm) {
+            case CAESAR:
+                return encryptionCaesarAlgorithmServiceImpl.decryptByteMessage(encryptedMessage, key);
+            case VIGENERE:
+            return encryptionVigenereAlgorithmServiceImpl.decryptByteMessage(encryptedMessage, key);
+            case ROT_13:
+            return encryptionCaesarAlgorithmServiceImpl.decryptByteMessage(encryptedMessage, "13");
+            case NO_ALGORITHM:
+                return encryptedMessage;
+            default:
+                throw new IllegalArgumentException("No implementation for choosen algortihm found");
         }
     }
 }

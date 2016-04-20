@@ -20,7 +20,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </Label>
-            <TextArea fx:id="textOutput" disable="true" editable="false" maxHeight="600.0" prefHeight="400.0" prefWidth="600.0" wrapText="true">
+            <TextArea fx:id="textOutput" disable="true" editable="false" maxHeight="600.0" prefHeight="200.0" prefWidth="600.0" wrapText="true">
                <padding>
                   <Insets bottom="10.0" left="50.0" right="50.0" top="10.0" />
                </padding>

@@ -20,9 +20,7 @@ import pl.edu.spring.tcp.FileData;
 import pl.edu.spring.tcp.TcpClientServerService;
 import pl.edu.spring.tcp.support.CustomContextLoader;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -76,6 +74,7 @@ public class MessageFrameController {
             + "\n=========================================================";
     private GenericXmlApplicationContext context;
     private File selectedFileToSend;
+    private File receivedFile;
     private File directoryForReceivedFiles = new File("E:\\Pobrane");
     private String lastReceivedMessage;
     private File keyFile;
@@ -122,10 +121,10 @@ public class MessageFrameController {
         algorithmComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             switch (newValue){
                 case NO_ALGORITHM:
+                case ROT_13:
                     keyPasswordField.setDisable(true);
                     chooseKeyFileButton.setDisable(true);
                     break;
-                case ROT_13:
                 case CAESAR:
                 case VIGENERE:
                     keyPasswordField.setDisable(false);
@@ -152,11 +151,11 @@ public class MessageFrameController {
         textOutput.setDisable(false);
         sendFileButton.setDisable(false);
         chooseDirectoryButton.setDisable(false);
-        sendFileButton.setDisable(false);
         sendButton.setDisable(false);
         decryptButton.setDisable(false);
         algorithmComboBox.setDisable(false);
-        keyPasswordField.setDisable(false);
+        keyPasswordField.setDisable(true);
+        chooseKeyFileButton.setDisable(true);
     }
 
     //JAVA FX ACTIONS
@@ -173,7 +172,15 @@ public class MessageFrameController {
         Task sendingTask = new Task() {
             @Override
             protected Object call() throws Exception {
-                String answer = tcpClientServerService.sendFile(selectedFileToSend);
+                File fileEncrypted = new File(selectedFileToSend.getPath()+ (2));
+                FileOutputStream fos = new FileOutputStream(fileEncrypted);
+                InputStream in = new FileInputStream(selectedFileToSend);
+                byte[] bytes = new byte[(int) selectedFileToSend.length()];
+                in.read(bytes);
+                fos.write(encryptionCompositeMessageService.encryptByteMessage(bytes, getEncParams()));
+                fos.close();
+                in.close();
+                String answer = tcpClientServerService.sendFile(fileEncrypted);
                 String output = textOutput.getText();
                 output = output.concat("\n" +"other  " + df.format(new Date()) + "\n" +answer);
                 textOutput.setText(output);
@@ -251,6 +258,30 @@ public class MessageFrameController {
     }
 
     public void decrypt(){
+        if(receivedFile != null){
+            decryptReceivedFile();
+        }else{
+            decryptStringMessage();
+        }
+    }
+
+    private void decryptReceivedFile() {
+        File decryptedFile = new File(directoryForReceivedFiles.getAbsolutePath() + "\\" + receivedFile.getName().substring(0, receivedFile.getName().length()-1));
+        try {
+            FileOutputStream fos = new FileOutputStream(decryptedFile);
+            InputStream in = new FileInputStream(receivedFile);
+            byte[] bytes = new byte[(int) receivedFile.length()];
+            in.read(bytes);
+            fos.write(encryptionCompositeMessageService.decryptByteMessage(bytes, getEncParams()));
+            fos.close();
+            in.close();
+            receivedFile = null;
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void decryptStringMessage() {
         String decryptedMessage = encryptionCompositeMessageService.decryptStringMessage(lastReceivedMessage, getEncParams());
         String output = textOutput.getText();
         output = output.concat("\n" +"po deszyfryzacji: " + df.format(new Date()) + "\n"  + decryptedMessage);
@@ -286,9 +317,9 @@ public class MessageFrameController {
         if(output.equals(WELCOMETEXT)){
             output = "";
         }
-        File fileToWrite = new File(directoryForReceivedFiles.getAbsolutePath() + "\\" + in.getFileName());
+        receivedFile = new File(directoryForReceivedFiles.getAbsolutePath() + "\\" + in.getFileName());
         try {
-            FileOutputStream fos = new FileOutputStream(fileToWrite);
+            FileOutputStream fos = new FileOutputStream(receivedFile);
             fos.write(in.getByteArray());
             fos.close();
         } catch (java.io.IOException e) {

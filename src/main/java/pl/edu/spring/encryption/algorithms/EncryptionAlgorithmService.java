@@ -6,6 +6,8 @@ package pl.edu.spring.encryption.algorithms;
 public interface EncryptionAlgorithmService {
 
     String encryptStringMessage(String originalMessage, String key) throws IllegalArgumentException;
-
     String decryptStringMessage(String encryptedMessage, String key) throws IllegalArgumentException;
+
+    byte[] encryptByteMessage(byte[] originalMessage, String key) throws IllegalArgumentException;
+    byte[] decryptByteMessage(byte[] encryptedMessage, String key) throws IllegalArgumentException;
 }
