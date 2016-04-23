@@ -1,7 +1,6 @@
 package pl.edu.spring.application.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import org.springframework.stereotype.Controller;
 import org.springframework.test.annotation.DirtiesContext;
@@ -13,12 +12,12 @@ import pl.edu.spring.tcp.support.CustomContextLoader;
 @ContextConfiguration(loader = CustomContextLoader.class, locations = "/META-INF/spring-config.xml")
 @DirtiesContext
 public class ConnectionFrameController {
-    @FXML
-    private Button connectButton;
+
     @FXML
     private TextField ipHostTextField;
     @FXML
     private TextField portTextField;
+
     private StartMessageApplication application;
 
 
@@ -37,7 +36,7 @@ public class ConnectionFrameController {
     public void connect() throws Throwable {
         application.setIpAddress(ipHostTextField.getText());
         application.setPort(portTextField.getText());
-        application.showMessageFrame();
+        application.showMessageFrame(null);
         super.finalize();
     }
 

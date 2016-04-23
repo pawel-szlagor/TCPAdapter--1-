@@ -80,26 +80,18 @@ public class StartMessageApplication extends Application {
         });
 
         Optional<ConnectionParams> result = dialog.showAndWait();
-
-        if (result.isPresent()) {
-            this.ipAddress = result.get().getIpAddress();
-            this.hostPort = result.get().getHostPort();
-            this.clientPort = result.get().getClientPort();
-        }
         waitingDialog = new Alert(INFORMATION, "Proszę czekać. Trwa ładowanie aplikacji...", CANCEL);
         waitingDialog.show();
-        showMessageFrame();
+        showMessageFrame(result.get());
     }
 
-    public void showMessageFrame() throws IOException {
+    public void showMessageFrame(ConnectionParams connectionParams) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getClassLoader().getResource("view/MessageFrame.fxml"));
         BorderPane layout = loader.load();
         controller = loader.getController();
         controller.setApplication(this);
-        controller.setIpAddress(ipAddress);
-        controller.setHostPort(hostPort);
-        controller.setClientPort(clientPort);
+        controller.setConnectionParams(connectionParams);
         controller.initializeContext();
         primaryStage.setTitle("Encrypted Messanger");
         primaryStage.setScene(new Scene(layout));

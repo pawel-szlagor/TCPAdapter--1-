@@ -37,13 +37,12 @@
             </TextArea>
             <AnchorPane>
                <children>
-                  <ToolBar AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                  <ToolBar nodeOrientation="RIGHT_TO_LEFT" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                      <items>
-                        <Button fx:id="closeButton" mnemonicParsing="false" onAction="#closeApplication" text="Zakończ" />
-                        <Button fx:id="sendFileButton" disable="true" mnemonicParsing="false" onAction="#chooseFileToSend" text="Wyślij plik.." />
-                        <Button fx:id="chooseDirectoryButton" disable="true" mnemonicParsing="false" onAction="#chooseDirectory" text="Wybierz folder.." />
-                        <Button fx:id="decryptButton" disable="true" mnemonicParsing="false" onAction="#decrypt" text="Deszyfruj" />
                         <Button fx:id="sendButton" alignment="CENTER_RIGHT" defaultButton="true" disable="true" mnemonicParsing="false" onAction="#send" text="Wyślij" />
+                        <Button fx:id="sendFileButton" disable="true" mnemonicParsing="false" onAction="#chooseFileToSend" text="Wyślij plik.." />
+                        <Button fx:id="decryptButton" disable="true" mnemonicParsing="false" onAction="#decrypt" text="Deszyfruj" />
+                        <Button fx:id="chooseDirectoryButton" disable="true" mnemonicParsing="false" onAction="#chooseDirectory" text="Wybierz folder.." />
                      </items>
                      <opaqueInsets>
                         <Insets />
