@@ -5,6 +5,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import pl.edu.spring.encryption.EncryptionAlgorithms;
+import pl.edu.spring.encryption.EncryptionParameters;
 import pl.edu.spring.encryption.algorithms.EncryptionAlgorithmService;
 import pl.edu.spring.tcp.support.CustomContextLoader;
 
@@ -18,15 +20,16 @@ import static org.junit.Assert.assertEquals;
 public class EncryptionCaesarAlgorithmServiceImplTest {
 
     @Autowired
-    EncryptionAlgorithmService encryptionCaesarAlgorithmService;
+    EncryptionAlgorithmService encryptionCaesarAlgorithmServiceImpl;
 
     @Test
     public void shouldEncryptSimpleWordWithoutPolishCharactersWithKeyOne(){
         //given
         String originalMessage = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String key = "1";
+        EncryptionParameters parameters = getEncryptionParameters(key);
         //when
-        String encryptedMessage = encryptionCaesarAlgorithmService.encryptStringMessage(originalMessage, key);
+        String encryptedMessage = encryptionCaesarAlgorithmServiceImpl.encryptStringMessage(originalMessage, parameters);
         //then
         assertEquals(encryptedMessage, "bcdefghijklmnopqrstuvwxyzaBCDEFGHIJKLMNOPQRSTUVWXYZA");
     }
@@ -36,8 +39,9 @@ public class EncryptionCaesarAlgorithmServiceImplTest {
         //given
         String originalMessage = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String key = "26";
+        EncryptionParameters parameters = getEncryptionParameters(key);
         //when
-        String encryptedMessage = encryptionCaesarAlgorithmService.encryptStringMessage(originalMessage, key);
+        String encryptedMessage = encryptionCaesarAlgorithmServiceImpl.encryptStringMessage(originalMessage, parameters);
         //then
         assertEquals(encryptedMessage, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
     }
@@ -47,8 +51,9 @@ public class EncryptionCaesarAlgorithmServiceImplTest {
         //given
         String originalMessage = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String key = "27";
+        EncryptionParameters parameters = getEncryptionParameters(key);
         //when
-        String encryptedMessage = encryptionCaesarAlgorithmService.encryptStringMessage(originalMessage, key);
+        String encryptedMessage = encryptionCaesarAlgorithmServiceImpl.encryptStringMessage(originalMessage, parameters);
         //then
         assertEquals(encryptedMessage, "bcdefghijklmnopqrstuvwxyzaBCDEFGHIJKLMNOPQRSTUVWXYZA");
     }
@@ -58,8 +63,9 @@ public class EncryptionCaesarAlgorithmServiceImplTest {
         //given
         String encryptedMessage = "bcdefghijklmnopqrstuvwxyzaBCDEFGHIJKLMNOPQRSTUVWXYZA";
         String key = "1";
+        EncryptionParameters parameters = getEncryptionParameters(key);
         //when
-        String decryptedMessage = encryptionCaesarAlgorithmService.decryptStringMessage(encryptedMessage, key);
+        String decryptedMessage = encryptionCaesarAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, parameters);
         //then
         assertEquals(decryptedMessage, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
     }
@@ -69,8 +75,9 @@ public class EncryptionCaesarAlgorithmServiceImplTest {
         //given
         String encryptedMessage = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String key = "26";
+        EncryptionParameters parameters = getEncryptionParameters(key);
         //when
-        String decryptedMessage = encryptionCaesarAlgorithmService.decryptStringMessage(encryptedMessage, key);
+        String decryptedMessage = encryptionCaesarAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, parameters);
         //then
         assertEquals(decryptedMessage, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
     }
@@ -80,9 +87,14 @@ public class EncryptionCaesarAlgorithmServiceImplTest {
         //given
         String encryptedMessage = "bcdefghijklmnopqrstuvwxyzaBCDEFGHIJKLMNOPQRSTUVWXYZA";
         String key = "27";
+        EncryptionParameters parameters = getEncryptionParameters(key);
         //when
-        String decryptedMessage = encryptionCaesarAlgorithmService.decryptStringMessage(encryptedMessage, key);
+        String decryptedMessage = encryptionCaesarAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, parameters);
         //then
         assertEquals(decryptedMessage, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    }
+
+    private EncryptionParameters getEncryptionParameters(String key) {
+        return new EncryptionParameters(EncryptionAlgorithms.CAESAR, key);
     }
 }

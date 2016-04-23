@@ -1,6 +1,7 @@
 package pl.edu.spring.encryption.algorithms.impl;
 
 import org.springframework.stereotype.Service;
+import pl.edu.spring.encryption.EncryptionParameters;
 import pl.edu.spring.encryption.algorithms.EncryptionAlgorithmService;
 
 import java.util.stream.IntStream;
@@ -12,8 +13,9 @@ import java.util.stream.IntStream;
 public class EncryptionCaesarAlgorithmServiceImpl implements EncryptionAlgorithmService {
 
     @Override
-    public String encryptStringMessage(String originalMessage, String key) throws IllegalArgumentException {
+    public String encryptStringMessage(String originalMessage, EncryptionParameters encryptionParameters) throws IllegalArgumentException {
         try {
+            String key = encryptionParameters.getStringKey();
             int shift = Integer.parseInt(key);
             return originalMessage.chars()
                     .map(character -> encryptSingleChar(character, shift))
@@ -25,8 +27,9 @@ public class EncryptionCaesarAlgorithmServiceImpl implements EncryptionAlgorithm
     }
 
     @Override
-    public String decryptStringMessage(String encryptedMessage, String key) {
+    public String decryptStringMessage(String encryptedMessage, EncryptionParameters encryptionParameters) {
         try {
+            String key = encryptionParameters.getStringKey();
             int shift = Integer.parseInt(key);
             return encryptedMessage.chars()
                     .map(character -> decryptSingleChar(character, shift))
@@ -46,8 +49,9 @@ public class EncryptionCaesarAlgorithmServiceImpl implements EncryptionAlgorithm
     }
 
     @Override
-    public byte[] encryptByteMessage(byte[] originalMessage, String key) throws IllegalArgumentException {
+    public byte[] encryptByteMessage(byte[] originalMessage, EncryptionParameters encryptionParameters) throws IllegalArgumentException {
         try {
+            String key = encryptionParameters.getStringKey();
             int shift = Integer.parseInt(key);
             int[] resultInt = IntStream.range(0, originalMessage.length).map(i -> encyptSingleByte(originalMessage[i], shift)).toArray();
             byte[] resultByte = new byte[resultInt.length];
@@ -61,8 +65,9 @@ public class EncryptionCaesarAlgorithmServiceImpl implements EncryptionAlgorithm
     }
 
     @Override
-    public byte[] decryptByteMessage(byte[] encryptedMessage, String key) {
+    public byte[] decryptByteMessage(byte[] encryptedMessage, EncryptionParameters encryptionParameters) {
         try {
+            String key = encryptionParameters.getStringKey();
             int shift = Integer.parseInt(key);
             int[] resultInt = IntStream.range(0, encryptedMessage.length).map(i -> decyptSingleByte(encryptedMessage[i], shift)).toArray();
             byte[] resultByte = new byte[resultInt.length];

@@ -35,9 +35,7 @@ public class ConnectionFrameController {
     //JAVA FX ACTIONS
 
     public void connect() throws Throwable {
-        application.setIpAddress(ipHostTextField.getText());
-        application.setPort(portTextField.getText());
-        application.showMessageFrame();
+        application.showMessageFrame(null);
         super.finalize();
     }
 

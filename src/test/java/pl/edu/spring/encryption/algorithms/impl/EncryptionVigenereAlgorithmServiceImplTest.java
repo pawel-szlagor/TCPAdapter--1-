@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import pl.edu.spring.encryption.EncryptionAlgorithms;
+import pl.edu.spring.encryption.EncryptionParameters;
 import pl.edu.spring.encryption.algorithms.EncryptionAlgorithmService;
 import pl.edu.spring.tcp.support.CustomContextLoader;
 
@@ -27,8 +29,9 @@ public class EncryptionVigenereAlgorithmServiceImplTest {
         //given
         String originalMessage = "TO JEST BARDZO TAJNY TEKST";
         String key = "TAJNE";
+        EncryptionParameters parameters = new EncryptionParameters(EncryptionAlgorithms.AES, key);
         //when
-        String encryptedMessage = encryptionVigenereAlgorithmService.encryptStringMessage(originalMessage, key);
+        String encryptedMessage = encryptionVigenereAlgorithmService.encryptStringMessage(originalMessage, parameters);
         //then
         assertEquals(encryptedMessage, "MO SRWM BJEHSO CNNGY CROLT");
     }
@@ -38,8 +41,9 @@ public class EncryptionVigenereAlgorithmServiceImplTest {
         //given
         String encryptedMessage = "MO SRWM BJEHSO CNNGY CROLT";
         String key = "TAJNE";
+        EncryptionParameters parameters = new EncryptionParameters(EncryptionAlgorithms.AES, key);
         //when
-        String decryptedMessage = encryptionVigenereAlgorithmService.decryptStringMessage(encryptedMessage, key);
+        String decryptedMessage = encryptionVigenereAlgorithmService.decryptStringMessage(encryptedMessage, parameters);
         //then
         assertEquals(decryptedMessage, "TO JEST BARDZO TAJNY TEKST");
     }

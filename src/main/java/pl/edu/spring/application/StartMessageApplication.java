@@ -24,24 +24,17 @@ public class StartMessageApplication extends Application {
 
     private MessageFrameController controller;
     private ConnectionFrameController connectionController;
-    private String ipAddress;
-    private String hostPort;
     private Stage primaryStage;
     private Alert waitingDialog;
-    private String clientPort;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-       /* FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getClassLoader().getResource("view/ConnectionFrame.fxml"));
-        GridPane connectionLayout = loader.load();
-        connectionController = loader.getController();
-        connectionController.setApplication(this);
-        primaryStage.setTitle("Choose connection options");
-        Scene connectionScene = new Scene(connectionLayout);
-        primaryStage.setScene(connectionScene);
-        primaryStage.show();*/
+        Optional<ConnectionParams> result = showConnectionDialog();
+        showMessageFrame(result.get());
+    }
+
+    private Optional<ConnectionParams> showConnectionDialog() {
         Dialog<ConnectionParams> dialog = new Dialog<>();
         dialog.setTitle("Wybierz parametry połączenia");
         dialog.setHeaderText("Proszę wprowadzić adres IP hosta oraz porty użyte do połączenia.");
@@ -80,26 +73,18 @@ public class StartMessageApplication extends Application {
         });
 
         Optional<ConnectionParams> result = dialog.showAndWait();
-
-        if (result.isPresent()) {
-            this.ipAddress = result.get().getIpAddress();
-            this.hostPort = result.get().getHostPort();
-            this.clientPort = result.get().getClientPort();
-        }
         waitingDialog = new Alert(INFORMATION, "Proszę czekać. Trwa ładowanie aplikacji...", CANCEL);
         waitingDialog.show();
-        showMessageFrame();
+        return result;
     }
 
-    public void showMessageFrame() throws IOException {
+    public void showMessageFrame(ConnectionParams connectionParams) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getClassLoader().getResource("view/MessageFrame.fxml"));
         BorderPane layout = loader.load();
         controller = loader.getController();
         controller.setApplication(this);
-        controller.setIpAddress(ipAddress);
-        controller.setHostPort(hostPort);
-        controller.setClientPort(clientPort);
+        controller.setConnectionParams(connectionParams);
         controller.initializeContext();
         primaryStage.setTitle("Encrypted Messanger");
         primaryStage.setScene(new Scene(layout));
@@ -118,23 +103,4 @@ public class StartMessageApplication extends Application {
         launch(args);
     }
 
-    public MessageFrameController getController() {
-        return controller;
-    }
-
-    public String getIpAddress() {
-        return ipAddress;
-    }
-
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
-    }
-
-    public String getPort() {
-        return hostPort;
-    }
-
-    public void setPort(String port) {
-        this.hostPort = port;
-    }
 }

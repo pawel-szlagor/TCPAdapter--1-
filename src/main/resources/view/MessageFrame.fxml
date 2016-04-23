@@ -37,13 +37,12 @@
             </TextArea>
             <AnchorPane>
                <children>
-                  <ToolBar AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                  <ToolBar nodeOrientation="RIGHT_TO_LEFT" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                      <items>
-                        <Button fx:id="closeButton" mnemonicParsing="false" onAction="#closeApplication" text="Zakończ" />
-                        <Button fx:id="sendFileButton" disable="true" mnemonicParsing="false" onAction="#chooseFileToSend" text="Wyślij plik.." />
-                        <Button fx:id="chooseDirectoryButton" disable="true" mnemonicParsing="false" onAction="#chooseDirectory" text="Wybierz folder.." />
-                        <Button fx:id="decryptButton" disable="true" mnemonicParsing="false" onAction="#decrypt" text="Deszyfruj" />
                         <Button fx:id="sendButton" alignment="CENTER_RIGHT" defaultButton="true" disable="true" mnemonicParsing="false" onAction="#send" text="Wyślij" />
+                        <Button fx:id="sendFileButton" disable="true" mnemonicParsing="false" onAction="#chooseFileToSend" text="Wyślij plik.." />
+                        <Button fx:id="decryptButton" disable="true" mnemonicParsing="false" onAction="#decrypt" text="Deszyfruj" />
+                        <Button fx:id="chooseDirectoryButton" disable="true" mnemonicParsing="false" onAction="#chooseDirectory" text="Wybierz folder.." />
                      </items>
                      <opaqueInsets>
                         <Insets />
@@ -61,7 +60,7 @@
             </Label>
           <AnchorPane>
                <children>
-                  <HBox alignment="CENTER_LEFT" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+                  <HBox AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <children>
                         <Label prefHeight="45.0" prefWidth="107.0" text="Wybierz algorytm szyfrowania:" wrapText="true">
                            <cursor>
@@ -70,17 +69,29 @@
                         </Label>
                         <ComboBox fx:id="algorithmComboBox" disable="true" prefWidth="150.0">
                            <HBox.margin>
-                              <Insets right="5.0" />
+                              <Insets right="5.0" top="5.0" />
                            </HBox.margin>
                         </ComboBox>
-                        <Label text="Podaj klucz:">
+                        <VBox>
+                           <children>
+                              <Label text="Podaj klucz:" />
+                              <Label prefHeight="34.0" prefWidth="77.0" text="Podaj wektor inicj.:" wrapText="true">
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
                            <HBox.margin>
-                              <Insets left="5.0" right="5.0" />
+                              <Insets top="10.0" />
                            </HBox.margin>
-                        </Label>
+                        </VBox>
                         <VBox spacing="5.0">
                            <children>
-                              <PasswordField fx:id="keyPasswordField" disable="true" />
+                              <PasswordField fx:id="keyPasswordField" disable="true" prefWidth="250.0" />
+                              <PasswordField fx:id="initVecPasswordField" disable="true" prefWidth="250.0" />
                               <Button fx:id="chooseKeyFileButton" contentDisplay="TOP" mnemonicParsing="false" onAction="#chooseKeyFile" text="Wybierz plik z kluczem" wrapText="true" />
                            </children>
                            <padding>

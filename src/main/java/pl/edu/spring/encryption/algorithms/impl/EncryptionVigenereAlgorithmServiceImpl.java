@@ -1,6 +1,7 @@
 package pl.edu.spring.encryption.algorithms.impl;
 
 import org.springframework.stereotype.Service;
+import pl.edu.spring.encryption.EncryptionParameters;
 import pl.edu.spring.encryption.algorithms.EncryptionAlgorithmService;
 
 /**
@@ -10,7 +11,8 @@ import pl.edu.spring.encryption.algorithms.EncryptionAlgorithmService;
 public class EncryptionVigenereAlgorithmServiceImpl implements EncryptionAlgorithmService {
 
     @Override
-    public String encryptStringMessage(String originalMessage, String key) {
+    public String encryptStringMessage(String originalMessage, EncryptionParameters encryptionParameters) {
+        String key = encryptionParameters.getStringKey();
         StringBuilder builder = new StringBuilder();
         int keyLength = key.length();
         for (int i = 0, j = 0; i < originalMessage.length(); i++) {
@@ -26,7 +28,8 @@ public class EncryptionVigenereAlgorithmServiceImpl implements EncryptionAlgorit
     }
 
     @Override
-    public String decryptStringMessage(String encryptedMessage, String key) {
+    public String decryptStringMessage(String encryptedMessage, EncryptionParameters encryptionParameters) {
+        String key = encryptionParameters.getStringKey();
         StringBuilder builder = new StringBuilder();
         int keyLength = key.length();
         for (int i = 0, j = 0; i < encryptedMessage.length(); i++) {
@@ -42,7 +45,8 @@ public class EncryptionVigenereAlgorithmServiceImpl implements EncryptionAlgorit
     }
 
     @Override
-    public byte[] encryptByteMessage(byte[] originalMessage, String key) throws IllegalArgumentException {
+    public byte[] encryptByteMessage(byte[] originalMessage, EncryptionParameters encryptionParameters) throws IllegalArgumentException {
+        String key = encryptionParameters.getStringKey();
         byte[] result = new byte[originalMessage.length];
         int keyLength = key.length();
         for (int i = 0; i < originalMessage.length; i++) {
@@ -52,7 +56,8 @@ public class EncryptionVigenereAlgorithmServiceImpl implements EncryptionAlgorit
     }
 
     @Override
-    public byte[] decryptByteMessage(byte[] encryptedMessage, String key) throws IllegalArgumentException {
+    public byte[] decryptByteMessage(byte[] encryptedMessage, EncryptionParameters encryptionParameters) throws IllegalArgumentException {
+        String key = encryptionParameters.getStringKey();
         byte[] result = new byte[encryptedMessage.length];
         int keyLength = key.length();
         for (int i = 0; i < encryptedMessage.length; i++) {

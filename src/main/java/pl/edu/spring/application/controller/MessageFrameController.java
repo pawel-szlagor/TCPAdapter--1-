@@ -11,6 +11,7 @@ import org.springframework.core.env.MapPropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import pl.edu.spring.application.ConnectionParams;
 import pl.edu.spring.application.StartMessageApplication;
 import pl.edu.spring.encryption.EncryptionAlgorithms;
 import pl.edu.spring.encryption.EncryptionCompositeMessageService;
@@ -48,6 +49,8 @@ public class MessageFrameController {
     @FXML
     private PasswordField keyPasswordField;
     @FXML
+    private PasswordField initVecPasswordField;
+    @FXML
     private Button chooseDirectoryButton;
     @FXML
     private Button decryptButton;
@@ -58,9 +61,7 @@ public class MessageFrameController {
     private TcpClientServerService tcpClientServerService;
     @Autowired
     private EncryptionCompositeMessageService encryptionCompositeMessageService;
-    private String ipAddress;
-    private String hostPort;
-    private String clientPort;
+    private ConnectionParams connectionParams;
     private StartMessageApplication application;
     private static final SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss:SSS");
     private static final String WELCOMETEXT
@@ -83,23 +84,21 @@ public class MessageFrameController {
     @FXML
     public void initialize(){
         initializeTextOutput();
-        initializeEncryptionOptions();
         activateControls();
+        initializeEncryptionOptions();
     }
 
     public void initializeContext() {
         context = new GenericXmlApplicationContext();
         System.out.print("Detect open server socket...");
-        //int availableServerSocket = SocketUtils.findAvailableServerSocket(Integer.parseInt(hostPort));
-        //int availableClientSocket = SocketUtils.findAvailableServerSocket(Integer.parseInt(clientPort));
-        int serverSocket = Integer.parseInt(hostPort);
-        int clientSocket = Integer.parseInt(clientPort);
+        int serverSocket = Integer.parseInt(connectionParams.getHostPort());
+        int clientSocket = Integer.parseInt(connectionParams.getClientPort());
 
         final Map<String, Object> sockets = new HashMap<String, Object>();
         sockets.put("availableServerSocket", serverSocket);
         sockets.put("availableClientSocket", clientSocket);
 
-        sockets.put("ipAddress", ipAddress);
+        sockets.put("ipAddress", connectionParams.getIpAddress());
 
         final MapPropertySource propertySource = new MapPropertySource("sockets", sockets);
 
@@ -107,7 +106,7 @@ public class MessageFrameController {
         context.load("classpath:META-INF/spring-config.xml");
         context.registerShutdownHook();
         context.refresh();
-        System.out.print("Connection established succesful with server ip " + ipAddress + " and using hostPort " + hostPort + " and using clientPort " + clientPort);
+        System.out.print("Connection established succesful with server ip " + connectionParams.getIpAddress() + " and using hostPort " + connectionParams.getHostPort() + " and using clientPort " + connectionParams.getClientPort());
         tcpClientServerService = context.getBean(TcpClientServerService.class);
         encryptionCompositeMessageService = context.getBean(EncryptionCompositeMessageServiceImpl.class);
         tcpClientServerService.setController(this);
@@ -121,13 +120,17 @@ public class MessageFrameController {
                 case NO_ALGORITHM:
                 case ROT_13:
                     keyPasswordField.setDisable(true);
+                    initVecPasswordField.setDisable(true);
                     chooseKeyFileButton.setDisable(true);
                     break;
                 case CAESAR:
                 case VIGENERE:
+                    keyPasswordField.setDisable(false);
+                    break;
                 case AES:
                     keyPasswordField.setDisable(false);
-                    chooseKeyFileButton.setDisable(true);
+                    chooseKeyFileButton.setDisable(false);
+                    initVecPasswordField.setDisable(false);
             }
         });
     }
@@ -154,6 +157,7 @@ public class MessageFrameController {
         decryptButton.setDisable(false);
         algorithmComboBox.setDisable(false);
         keyPasswordField.setDisable(true);
+        initVecPasswordField.setDisable(true);
         chooseKeyFileButton.setDisable(true);
     }
 
@@ -215,12 +219,12 @@ public class MessageFrameController {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        keyPasswordField.clear();
     }
 
     private void handleSendingError(Exception ex) {
         Alert exceptionAlert = new Alert(Alert.AlertType.ERROR, ex.getCause().getMessage(), ButtonType.CLOSE);
         exceptionAlert.setHeaderText("Podano niepoprawne dane!");
+        exceptionAlert.setContentText(ex.getMessage());
         exceptionAlert.setTitle("Błąd - niepoprawne dane!");
         exceptionAlert.show();
     }
@@ -232,8 +236,9 @@ public class MessageFrameController {
             case CAESAR:
             case ROT_13:
             case VIGENERE:
-            case AES:
                 return new EncryptionParameters(algorithmChosen, keyPasswordField.getText());
+            case AES:
+                return new EncryptionParameters(algorithmChosen, keyPasswordField.getText(), initVecPasswordField.getText(), keyFile);
         }
         return null;
     }
@@ -329,27 +334,11 @@ public class MessageFrameController {
         textOutput.setText(output);
     }
 
-    public String getIpAddress() {
-        return ipAddress;
+    public ConnectionParams getConnectionParams() {
+        return connectionParams;
     }
 
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
-    }
-
-    public String getHostPort() {
-        return hostPort;
-    }
-
-    public void setHostPort(String hostPort) {
-        this.hostPort = hostPort;
-    }
-
-    public String getClientPort() {
-        return clientPort;
-    }
-
-    public void setClientPort(String clientPort) {
-        this.clientPort = clientPort;
+    public void setConnectionParams(ConnectionParams connectionParams) {
+        this.connectionParams = connectionParams;
     }
 }

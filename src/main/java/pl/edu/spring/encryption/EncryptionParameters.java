@@ -8,7 +8,21 @@ import java.io.File;
 public class EncryptionParameters {
     private EncryptionAlgorithms algorithm;
     private String stringKey;
+    private String initVector;
     private File fileKey;
+
+    public EncryptionParameters(EncryptionAlgorithms algorithm, String stringKey, String initVector, File fileKey) {
+        this.algorithm = algorithm;
+        this.stringKey = stringKey;
+        this.initVector = initVector;
+        this.fileKey = fileKey;
+    }
+
+    public EncryptionParameters(EncryptionAlgorithms algorithm, String stringKey, String initVector) {
+        this.algorithm = algorithm;
+        this.stringKey = stringKey;
+        this.initVector = initVector;
+    }
 
     public EncryptionParameters(EncryptionAlgorithms algorithm, String key) {
         this.algorithm = algorithm;
@@ -42,5 +56,13 @@ public class EncryptionParameters {
 
     public void setFileKey(File fileKey) {
         this.fileKey = fileKey;
+    }
+
+    public String getInitVector() {
+        return initVector;
+    }
+
+    public void setInitVector(String initVector) {
+        this.initVector = initVector;
     }
 }

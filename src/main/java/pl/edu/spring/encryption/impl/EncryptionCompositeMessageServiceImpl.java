@@ -18,6 +18,8 @@ public class EncryptionCompositeMessageServiceImpl implements EncryptionComposit
     @Autowired
     private EncryptionAlgorithmService encryptionCaesarAlgorithmServiceImpl;
     @Autowired
+    private EncryptionAlgorithmService encryptionROT13AlgorithmServiceImpl;
+    @Autowired
     private EncryptionAlgorithmService encryptionVigenereAlgorithmServiceImpl;
     @Autowired
     private EncryptionAlgorithmService encryptionAESAlgorithmServiceImpl;
@@ -30,16 +32,15 @@ public class EncryptionCompositeMessageServiceImpl implements EncryptionComposit
     @Override
     public String encryptStringMessage(String originalMessage, EncryptionParameters encParam) throws IllegalArgumentException {
         EncryptionAlgorithms algorithm = encParam.getAlgorithm();
-        String key = encParam.getStringKey();
         switch (algorithm) {
             case CAESAR:
-                return encryptionCaesarAlgorithmServiceImpl.encryptStringMessage(originalMessage, key);
+                return encryptionCaesarAlgorithmServiceImpl.encryptStringMessage(originalMessage, encParam);
             case VIGENERE:
-                return encryptionVigenereAlgorithmServiceImpl.encryptStringMessage(originalMessage, key);
+                return encryptionVigenereAlgorithmServiceImpl.encryptStringMessage(originalMessage, encParam);
             case ROT_13:
-                return encryptionCaesarAlgorithmServiceImpl.encryptStringMessage(originalMessage, "13");
+                return encryptionROT13AlgorithmServiceImpl.encryptStringMessage(originalMessage, encParam);
             case AES:
-                return encryptionAESAlgorithmServiceImpl.encryptStringMessage(originalMessage, key);
+                return encryptionAESAlgorithmServiceImpl.encryptStringMessage(originalMessage, encParam);
             case NO_ALGORITHM:
                 return originalMessage;
             default:
@@ -50,16 +51,15 @@ public class EncryptionCompositeMessageServiceImpl implements EncryptionComposit
     @Override
     public String decryptStringMessage(String encryptedMessage, EncryptionParameters encParam) {
         EncryptionAlgorithms algorithm = encParam.getAlgorithm();
-        String key = encParam.getStringKey();
         switch (algorithm) {
             case CAESAR:
-                return encryptionCaesarAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, key);
+                return encryptionCaesarAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, encParam);
             case VIGENERE:
-                return encryptionVigenereAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, key);
+                return encryptionVigenereAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, encParam);
             case ROT_13:
-                return encryptionCaesarAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, "13");
+                return encryptionCaesarAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, encParam);
             case AES:
-                return encryptionAESAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, key);
+                return encryptionAESAlgorithmServiceImpl.decryptStringMessage(encryptedMessage, encParam);
             case NO_ALGORITHM:
                 return encryptedMessage;
             default:
@@ -70,16 +70,15 @@ public class EncryptionCompositeMessageServiceImpl implements EncryptionComposit
     @Override
     public byte[] encryptByteMessage(byte[] originalMessage, EncryptionParameters encParam) throws IllegalArgumentException {
         EncryptionAlgorithms algorithm = encParam.getAlgorithm();
-        String key = encParam.getStringKey();
         switch (algorithm) {
             case CAESAR:
-                return encryptionCaesarAlgorithmServiceImpl.encryptByteMessage(originalMessage, key);
+                return encryptionCaesarAlgorithmServiceImpl.encryptByteMessage(originalMessage, encParam);
             case VIGENERE:
-                return encryptionVigenereAlgorithmServiceImpl.encryptByteMessage(originalMessage, key);
+                return encryptionVigenereAlgorithmServiceImpl.encryptByteMessage(originalMessage, encParam);
             case ROT_13:
-                return encryptionCaesarAlgorithmServiceImpl.encryptByteMessage(originalMessage, "13");
+                return encryptionCaesarAlgorithmServiceImpl.encryptByteMessage(originalMessage, encParam);
             case AES:
-                return encryptionAESAlgorithmServiceImpl.encryptByteMessage(originalMessage, key);
+                return encryptionAESAlgorithmServiceImpl.encryptByteMessage(originalMessage, encParam);
             case NO_ALGORITHM:
                 return originalMessage;
             default:
@@ -90,16 +89,15 @@ public class EncryptionCompositeMessageServiceImpl implements EncryptionComposit
     @Override
     public byte[] decryptByteMessage(byte[] encryptedMessage, EncryptionParameters encParam) {
         EncryptionAlgorithms algorithm = encParam.getAlgorithm();
-        String key = encParam.getStringKey();
         switch (algorithm) {
             case CAESAR:
-                return encryptionCaesarAlgorithmServiceImpl.decryptByteMessage(encryptedMessage, key);
+                return encryptionCaesarAlgorithmServiceImpl.decryptByteMessage(encryptedMessage, encParam);
             case VIGENERE:
-                return encryptionVigenereAlgorithmServiceImpl.decryptByteMessage(encryptedMessage, key);
+                return encryptionVigenereAlgorithmServiceImpl.decryptByteMessage(encryptedMessage, encParam);
             case ROT_13:
-                return encryptionCaesarAlgorithmServiceImpl.decryptByteMessage(encryptedMessage, "13");
+                return encryptionCaesarAlgorithmServiceImpl.decryptByteMessage(encryptedMessage, encParam);
             case AES:
-                return encryptionAESAlgorithmServiceImpl.decryptByteMessage(encryptedMessage, key);
+                return encryptionAESAlgorithmServiceImpl.decryptByteMessage(encryptedMessage, encParam);
             case NO_ALGORITHM:
                 return encryptedMessage;
             default:
